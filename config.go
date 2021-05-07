@@ -14,15 +14,14 @@ var (
 )
 
 func InitializeConfig(configName string) {
-	if configName == "" {
-		configName = "config.json"
-	}
 	viper.SetConfigFile(configName)
 	viper.AddConfigPath(".")
 
 	if err := viper.ReadInConfig(); err != nil {
-		fmt.Println(err)
-		//panic(err)
+		//only log error if file was specified
+		if configName != "" {
+			fmt.Println(err)
+		}
 	}
 	c = viper.GetViper()
 }
