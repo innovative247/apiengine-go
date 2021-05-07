@@ -16,7 +16,7 @@ import (
 type apiEngineHandler interface {
 	IsAuth() bool
 	Get(postfix string) ([]byte, error)
-	Post(postfix string, body map[string]string) ([]byte, error)
+	Post(postfix string, body map[string]interface{}) ([]byte, error)
 	loadBaseValues()
 	LoadFromConfig(configName string)
 }
@@ -46,7 +46,7 @@ func (a *apiengineData) Get(postfix string) ([]byte, error) {
 	}
 	return a.request(http.MethodGet, postfix, nil)
 }
-func (a *apiengineData) Post(postfix string, body map[string]string) ([]byte, error) {
+func (a *apiengineData) Post(postfix string, body map[string]interface{}) ([]byte, error) {
 	if !a.IsAuth() {
 		return nil, nil
 	}
@@ -136,7 +136,7 @@ func getAuthResult(data []byte) (apiEngineAuth, error) {
 	//fmt.Println(token1.ExpirationSeconds)
 	return res, err
 }
-func (a *apiengineData) request(verb string, postfix string, body map[string]string) ([]byte, error) {
+func (a *apiengineData) request(verb string, postfix string, body map[string]interface{}) ([]byte, error) {
 	jsonValue, _ := json.Marshal(body)
 	jsonBuff := bytes.NewBuffer(jsonValue)
 
